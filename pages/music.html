@@ -1,9 +1,30 @@
 <html>
   <head>
     <title>My Music</title>
-    <link rel="stylesheet" type="text/css" href="../css/music.css">
+    <link rel="stylesheet" type="text/css" href="/css/music.css">
+    <script>
+      function getSongs() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("../resouces/media/music/");
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            var songs = JSON.parse(xhr.responseText);
+            var list = document.getElementById('music-list');
+            for (var i = 0; i < songs.length; i++) {
+              var item = document.createElement('li');
+              var link = document.createElement('a');
+              link.href = 'music/' + songs[i];
+              link.textContent = songs[i];
+              item.appendChild(link);
+              list.appendChild(item);
+            }
+          }
+        };
+        xhr.send();
+      }
+    </script>
   </head>
-  <body>
+  <body onload="getSongs()">
     <header>
       <nav>
         <ul>
@@ -15,18 +36,7 @@
     </header>
     <main>
       <h1>My Music</h1>
-      <ul>
-        <?php
-        $folder = 'resources/media/music/';
-        $files = scandir($folder);
-        foreach ($files as $file) {
-          $file_parts = pathinfo($file);
-          if ($file_parts['extension'] == 'mp3') {
-            echo '<li><a href="' . $folder . $file . '">' . $file_parts['filename'] . '</a></li>';
-          }
-        }
-        ?>
-      </ul>
+      <ul id="music-list"></ul>
     </main>
   </body>
 </html>
