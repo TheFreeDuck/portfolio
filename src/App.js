@@ -4,7 +4,7 @@ const MusicPage = () => {
   const [songs, setSongs] = useState([]);
 
   useEffect(() => {
-    fetch("../resources/music/scientist.mp3")
+    fetch("../resources/music/songs.json")
       .then((response) => response.json())
       .then((data) => {
         setSongs(data);
